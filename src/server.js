@@ -33,7 +33,7 @@ export const setupServer = () => {
     throw new Error('Simulated server error');
   });
 
-  app.use('*', (req, res) => {
+  app.use((req, res) => {
     res.status(404).json({
       message: 'Route not found',
     });
