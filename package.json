@@ -1,0 +1,40 @@
+{
+  "name": "nodejs-hw",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "Iryna Yeremizina <irina3213@gmail.com>",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "globals": "^17.0.0",
+    "nodemon": "^3.1.11",
+    "prettier": "^3.7.4"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "pino": "^10.1.1",
+    "pino-http": "^11.0.0"
+  },
+  "env": {
+    "node": true,
+    "es2021": true
+  },
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-undef": "error"
+  }
+}
