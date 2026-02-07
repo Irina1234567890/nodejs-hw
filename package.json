@@ -13,8 +13,10 @@
   "description": "",
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
+    "dotenv": "^17.2.4",
     "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "mongoose": "^9.1.6",
     "pino": "^10.1.1",
     "pino-http": "^11.0.0",
     "pino-pretty": "^11.0.0"
