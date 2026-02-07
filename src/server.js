@@ -43,45 +43,29 @@ import { errorHandler } from './middleware/errorHandler.js';
 import notesRoutes from './routes/notesRoutes.js';
 import { errors } from 'celebrate';
 
-// const app = express();
-
-// app.use(express.json());
-// app.use(cors());
-// app.use(logger);
-
-// const PORT = process.env.PORT ?? 3030;
-
-// app.use(notesRoutes);
-
-// //MW
-// app.use(notFoundHandler);
-// app.use(errors());
-// app.use(errorHandler);
-
-
-
-// //DB
-// await connectMongoDB();
-
-// // Запуск сервера
-// app.listen(PORT, () => {
-// 	console.log(`Server is running on port ${PORT}`);
-// });
-//
-//
 const app = express();
 
+// 1. Загальні middleware
 app.use(express.json());
 app.use(cors());
 app.use(logger);
 
+// 2. Маршрути додатка
 app.use(notesRoutes);
 
+// 3. Обробник неіснуючих маршрутів (404)
+// Він має бути ПІСЛЯ маршрутів, але ПЕРЕД обробниками помилок
 app.use(notFoundHandler);
+
+// 4. Спеціальний обробник помилок валідації Celebrate
+// Він перехоплює помилки валідації та відправляє клієнту 400 Bad Request
 app.use(errors());
+
+// 5. Фінальний глобальний обробник помилок (500)
+// Завжди останній у ланцюжку
 app.use(errorHandler);
 
-const PORT = process.env.PORT ?? 3000;
+const PORT = process.env.PORT ?? 3000; // Виправлено порт на 3000 згідно з ТЗ
 
 const startServer = async () => {
   try {
@@ -89,8 +73,8 @@ const startServer = async () => {
     app.listen(PORT, () => {
       console.log(`✅ Server is running on port ${PORT}`);
     });
-  } catch (err) {
-    console.error('❌ Server startup failed:', err);
+  } catch (error) {
+    console.error('❌ Failed to start server:', error.message);
   }
 };
 
