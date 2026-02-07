@@ -58,28 +58,49 @@ import { errorHandler } from './middleware/errorHandler.js';
 //   });
 // };
 // setupServer();
-const app = express();
-const PORT = process.env.PORT ?? 3000;
+// const app = express();
+// const PORT = process.env.PORT ?? 3000;
 
-// Global middleware
-app.use(logger); // pino-http logger
-app.use(express.json());
-app.use(cors());
+// // Global middleware
+// app.use(logger); // pino-http logger
+// app.use(express.json());
+// app.use(cors());
 
-// Routes
-app.use(notesRoutes);
+// // Routes
+// app.use(notesRoutes);
 
-// 404 handler
-app.use(notFoundHandler);
+// // 404 handler
+// app.use(notFoundHandler);
 
-// Error handler (last)
-app.use(errorHandler);
+// // Error handler (last)
+// app.use(errorHandler);
 
-const start = async () => {
+// const start = async () => {
+//   await connectMongoDB();
+//   app.listen(PORT, () => {
+//     console.log(`Server is running on port ${PORT}`);
+//   });
+// };
+
+// start();
+//
+export const setupServer = async () => {
+  const app = express();
+  const PORT = process.env.PORT || 3000;
+
   await connectMongoDB();
+
+  app.use(logger);
+  app.use(express.json());
+  app.use(cors());
+
+  app.use(notesRoutes);
+
+  app.use(notFoundHandler);
+
+  app.use(errorHandler);
+
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
 };
-
-start();

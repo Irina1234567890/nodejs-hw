@@ -8,3 +8,5 @@ const startApp = () => {
 };
 
 startApp();
+
+setupServer();
