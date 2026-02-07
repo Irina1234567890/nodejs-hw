@@ -35,37 +35,33 @@
 
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import 'dotenv/config';
 import { connectMongoDB } from './db/connectMongoDB.js';
 import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import notesRoutes from './routes/notesRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 import { errors } from 'celebrate';
 
 const app = express();
 
-// 1. Загальні middleware
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser());
 app.use(logger);
 
-// 2. Маршрути додатка
+app.use('/auth', authRoutes);
 app.use(notesRoutes);
 
-// 3. Обробник неіснуючих маршрутів (404)
-// Він має бути ПІСЛЯ маршрутів, але ПЕРЕД обробниками помилок
 app.use(notFoundHandler);
 
-// 4. Спеціальний обробник помилок валідації Celebrate
-// Він перехоплює помилки валідації та відправляє клієнту 400 Bad Request
 app.use(errors());
 
-// 5. Фінальний глобальний обробник помилок (500)
-// Завжди останній у ланцюжку
 app.use(errorHandler);
 
-const PORT = process.env.PORT ?? 3000; // Виправлено порт на 3000 згідно з ТЗ
+const PORT = process.env.PORT ?? 3000; 
 
 const startServer = async () => {
   try {
