@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { celebrate } from 'celebrate'; // Додай цей імпорт назад
 import {
   getAllNotes,
   getNoteById,
@@ -6,7 +7,6 @@ import {
   deleteNote,
   updateNote
 } from '../controllers/notesController.js';
-// Видаляємо імпорт celebrate, він тут більше не потрібен
 import {
   createNoteSchema,
   noteIdSchema,
@@ -16,10 +16,10 @@ import {
 
 const router = Router();
 
-router.get('/notes', getAllNotesSchema, getAllNotes);
-router.get('/notes/:noteId', noteIdSchema, getNoteById);
-router.post('/notes', createNoteSchema, createNote);
-router.delete('/notes/:noteId', noteIdSchema, deleteNote);
-router.patch('/notes/:noteId', updateNoteSchema, updateNote);
+router.get('/notes', celebrate(getAllNotesSchema), getAllNotes);
+router.get('/notes/:noteId', celebrate(noteIdSchema), getNoteById);
+router.post('/notes', celebrate(createNoteSchema), createNote);
+router.delete('/notes/:noteId', celebrate(noteIdSchema), deleteNote);
+router.patch('/notes/:noteId', celebrate(updateNoteSchema), updateNote);
 
 export default router;

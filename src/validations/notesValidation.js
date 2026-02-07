@@ -56,22 +56,25 @@
 // };
 //
 //
-import { Joi, Segments, celebrate } from "celebrate"; 
+import { Joi, Segments } from "celebrate";
 import { isValidObjectId } from "mongoose";
 import { TAGS } from "../constants/tags.js";
 
 const objectIdValidator = (value, helpers) => {
-  return !isValidObjectId(value) ? helpers.message(`Invalid id format ${value}`) : value;
+  if (!isValidObjectId(value)) {
+    return helpers.message(`Invalid id format ${value}`);
+  }
+  return value;
 };
 
-export const noteIdSchema = celebrate({
-  [Segments.PARAMS]: Joi.object({
+export const noteIdSchema = {
+  [Segments.PARAMS]: Joi.object().keys({
     noteId: Joi.string().custom(objectIdValidator).required(),
   }),
-});
+};
 
-export const createNoteSchema = celebrate({
-  [Segments.BODY]: Joi.object({
+export const createNoteSchema = {
+  [Segments.BODY]: Joi.object().keys({
     title: Joi.string().min(1).max(230).required().trim().messages({
       "string.base": "Title must be a string",
       "string.min": "Title should have at least {#limit} characters",
@@ -82,27 +85,27 @@ export const createNoteSchema = celebrate({
     tag: Joi.string().valid(...TAGS).optional().trim().messages({
       'any.only': `Tag must be one of: ${TAGS.join(', ')}`,
     }),
-  })
-});
+  }),
+};
 
-export const updateNoteSchema = celebrate({
-  [Segments.PARAMS]: Joi.object({
+export const updateNoteSchema = {
+  [Segments.PARAMS]: Joi.object().keys({
     noteId: Joi.string().custom(objectIdValidator).required(),
   }),
-  [Segments.BODY]: Joi.object({
-    title: Joi.string().min(1).max(230).trim(),
-    content: Joi.string().allow("").trim(),
-    tag: Joi.string().valid(...TAGS),
-  }).min(1)
-});
+  [Segments.BODY]: Joi.object().keys({
+    title: Joi.string().min(1).max(230).trim().optional(),
+    content: Joi.string().allow("").trim().optional(),
+    tag: Joi.string().valid(...TAGS).optional(),
+  }).min(1),
+};
 
-export const getAllNotesSchema = celebrate({
-  [Segments.QUERY]: Joi.object({
+export const getAllNotesSchema = {
+  [Segments.QUERY]: Joi.object().keys({
     page: Joi.number().integer().min(1).default(1),
     perPage: Joi.number().integer().min(5).max(20).default(10),
-    search: Joi.string().max(30).allow("").trim(),
-    tag: Joi.string().valid(...TAGS).trim(),
+    search: Joi.string().max(30).allow("").trim().optional(),
+    tag: Joi.string().valid(...TAGS).trim().optional(),
     sortBy: Joi.string().valid("_id", "title", "tag").default("_id"),
     sortOrder: Joi.string().valid("asc", "desc").default("asc"),
-  })
-});
+  }),
+};
