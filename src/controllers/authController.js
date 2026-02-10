@@ -4,6 +4,14 @@ import createHttpError from "http-errors";
 import { User } from "../models/user.js";
 import { createSession, setSessionCookies } from "../services/auth.js";
 import { Session } from "../models/session.js";
+// import jwt from "jsonwebtoken";
+
+// const resetToken =jwt.sign(
+//   {sub: user._id, email}, process.env.JWT_SECRET, {expiresIn: '15m'},
+
+// );
+// const frontendUrl = `my-frontend.com/reset-password?token=${resetToken}`;
+// console.log(frontendUrl);
 
 export const registerUser = async (req, res, next) => {
 
