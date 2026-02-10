@@ -44,6 +44,7 @@ import { errorHandler } from './middleware/errorHandler.js';
 import notesRoutes from './routes/notesRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import { errors } from 'celebrate';
+import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 
@@ -52,7 +53,8 @@ app.use(cors());
 app.use(cookieParser());
 app.use(logger);
 
-app.use('/auth', authRoutes);
+app.use(authRoutes);
+app.use(userRoutes);
 app.use(notesRoutes);
 
 app.use(notFoundHandler);
@@ -61,7 +63,7 @@ app.use(errors());
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT ?? 3000; 
+const PORT = process.env.PORT ?? 3000;
 
 const startServer = async () => {
   try {
