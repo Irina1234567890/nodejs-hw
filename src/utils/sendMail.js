@@ -20,7 +20,7 @@
 // };
 //
 //
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -33,8 +33,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendEmail = async (options) => {
-  return transporter.sendMail({
-    from: process.env.SMTP_FROM,
+  return await transporter.sendMail({
     ...options,
   });
 };

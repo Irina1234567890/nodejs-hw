@@ -44,7 +44,6 @@
 // 	res.status(201).json(newUser);
 // };
 
-
 // export const loginUser = async (req, res, next) => {
 // 	if (!req.body?.email || !req.body?.password) {
 // 		return next(createHttpError(400, 'Email and password required'));
@@ -179,17 +178,17 @@
 // };
 //
 //
-import bcrypt from "bcrypt";
-import createHttpError from "http-errors";
-import jwt from "jsonwebtoken";
+import bcrypt from 'bcrypt';
+import createHttpError from 'http-errors';
+import jwt from 'jsonwebtoken';
 import handlebars from 'handlebars';
-import fs from "node:fs/promises";
-import path from "node:path";
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
-import { User } from "../models/user.js";
-import { Session } from "../models/session.js";
-import { createSession, setSessionCookies } from "../services/auth.js";
-import { sendEmail } from "../utils/sendMail.js"; // Виправлено: додано імпорт
+import { User } from '../models/user.js';
+import { Session } from '../models/session.js';
+import { createSession, setSessionCookies } from '../services/auth.js';
+import { sendEmail } from '../utils/sendMail.js';
 
 export const registerUser = async (req, res, next) => {
   try {
@@ -205,7 +204,7 @@ export const registerUser = async (req, res, next) => {
     const newUser = await User.create({
       username: email,
       email,
-      password: hashedPassword
+      password: hashedPassword,
     });
 
     const newSession = await createSession(newUser._id);
@@ -269,7 +268,8 @@ export const refreshUserSession = async (req, res, next) => {
       return next(createHttpError(401, 'Session not found'));
     }
 
-    const isSessionExpired = new Date() > new Date(session.refreshTokenValidUntil);
+    const isSessionExpired =
+      new Date() > new Date(session.refreshTokenValidUntil);
     if (isSessionExpired) {
       return next(createHttpError(401, 'Session token expired'));
     }
@@ -291,16 +291,20 @@ export const requestResetEmail = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(200).json({ message: 'Password reset email sent successfully' });
+      return res
+        .status(200)
+        .json({ message: 'Password reset email sent successfully' });
     }
 
     const resetToken = jwt.sign(
       { sub: user._id, email },
       process.env.JWT_SECRET,
-      { expiresIn: '15m' }
+      { expiresIn: '15m' },
     );
 
-    const templatePath = path.resolve('src/templates/reset-password-email.html');
+    const templatePath = path.resolve(
+      'src/templates/reset-password-email.html',
+    );
     const templateSource = await fs.readFile(templatePath, 'utf-8');
     const template = handlebars.compile(templateSource);
 
@@ -310,6 +314,7 @@ export const requestResetEmail = async (req, res, next) => {
     });
 
     await sendEmail({
+      from: process.env.SMTP_FROM,
       to: email,
       subject: 'Reset your password',
       html,
@@ -317,9 +322,10 @@ export const requestResetEmail = async (req, res, next) => {
 
     res.status(200).json({ message: 'Password reset email sent successfully' });
   } catch (err) {
-    // err використовується для логування, щоб не було помилки "unused variable"
-    console.error("Email sending error:", err);
-    next(createHttpError(500, 'Failed to send the email, please try again later.'));
+    console.error('Email sending error:', err);
+    next(
+      createHttpError(500, 'Failed to send the email, please try again later.'),
+    );
   }
 };
 
@@ -330,7 +336,7 @@ export const resetPassword = async (req, res, next) => {
     let payload;
     try {
       payload = jwt.verify(token, process.env.JWT_SECRET);
-    } catch  {
+    } catch {
       return next(createHttpError(401, 'Invalid or expired token'));
     }
 
