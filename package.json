@@ -10,20 +10,24 @@
   "keywords": [],
   "author": "Iryna Yeremizina <irina3213@gmail.com>",
   "license": "ISC",
-  "description": "",
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
+    "celebrate": "^15.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
     "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "http-errors": "^2.0.1",
+    "mongoose": "^9.1.6",
     "pino": "^10.1.1",
     "pino-http": "^11.0.0",
-    "pino-pretty": "^11.0.0"
+    "pino-pretty": "^11.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
     "eslint": "^9.17.0",
     "globals": "^15.14.0",
-    "nodemon": "^3.1.9",
+    "nodemon": "^3.1.11",
     "prettier": "^3.4.2"
-  }
+  },
+  "description": ""
 }
